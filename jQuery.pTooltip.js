@@ -1,6 +1,6 @@
 /*
  * Created  : Thu 03 Jan 2013 05:43:15 PM EST
- * Modified : Fri 04 Jan 2013 01:24:45 PM EST
+ * Modified : Fri 04 Jan 2013 03:08:43 PM EST
  * Author   : GI <gi1242+js@nospam.com> (replace nospam with gmail)
  *
  * Copyright 2013, GI.
@@ -40,7 +40,7 @@
 
 		    tip.show().position(
 			{ my: 'center top+15', at: 'center bottom', of: t,
-			    collision: 'fit' });
+			    collision: 'fit flip' });
 		});
 
 	    // Wait a little, and then call the close function.
