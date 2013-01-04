@@ -15,8 +15,8 @@ Usage
 
 HTML fragment (assumes jquery, jqueryui, and this plugin are loaded):
 
-<b title='ptooltip-1'>This</b> element shows a tooltip.
-So does <span title='ptooltip-2'>this</span> one.
+    <b title='ptooltip-1'>This</b> element shows a tooltip.
+    So does <span title='ptooltip-2'>this</span> one.
 
     <div id='ptooltip-1'>
 	This tool tip will stay open if you hover over it.
