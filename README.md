@@ -36,7 +36,7 @@ Note: The *title* attribute has the *id* of the element containing the tooltip.
 Demo
 ----
 
-http://jsfiddle.net/BgDxs/1/
+http://jsfiddle.net/BgDxs/2/
 
 
 Notes
