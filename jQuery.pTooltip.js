@@ -1,6 +1,6 @@
 /*
  * Created  : Thu 03 Jan 2013 05:43:15 PM EST
- * Modified : Sat 05 Jan 2013 12:00:46 AM EST
+ * Modified : Sat 05 Jan 2013 05:44:35 PM EST
  * Author   : GI <gi1242+js@nospam.com> (replace nospam with gmail)
  *
  * Copyright 2013, GI.
@@ -29,9 +29,14 @@
 	    if( tip.length === 0 )
 		throw( 'No element with ID ' + t.attr('title') );
 
-	    var closeTip = function( force )
+	    var closeTip = function( uid )
 		{
-		    if( force || !tip.data('pTooltip').mouseEntered )
+		    var d = tip.data('pTooltip')
+
+		    // Do nothing if the calling uid and tip.uid don't match.
+		    // Don't close if the mouse has entered the tooltip. (In
+		    // this case the tip will be closed by a mouseleave event)
+		    if( uid === d.uid && !d.mouseEntered )
 			tip.hide();
 		};
 
@@ -58,11 +63,13 @@
 	    // Show tooltip on mouse over.
 	    t.mouseover( function()
 		{
-		    var d = $.extend( tip.data('pTooltip'), { mouseEntered: false } );
-
-		    // First hide all visible tips
+		    // Hide all visible tips
 		    $(':visible:data(pTooltip)').hide();
 
+		    // Set UID to 0 here to cancel any closeTip events that
+		    // might fire from other elements that showed the same tip.
+		    var d = $.extend( tip.data('pTooltip'),
+			    { mouseEntered: false, uid: 0 } );
 		    tip.data( 'pTooltip', d );
 
 		    tip.show().position(
@@ -73,7 +80,12 @@
 	    // Wait a little, and then call the close function.
 	    t.mouseleave( function()
 		{
-		    setTimeout( function() { closeTip( false); }, 500 );
+		    // Use time (in miliseconds) as a UID
+		    var uid = new Date().getTime();
+		    var d = $.extend( tip.data('pTooltip'), { uid: uid} );
+		    tip.data( 'pTooltip', d );
+
+		    setTimeout( function() { closeTip( uid ); }, 500 );
 		});
 	    
 	} );
