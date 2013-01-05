@@ -48,7 +48,5 @@ However, I didn't have the time to wade through their build process to submit a 
 
 Compatibility
 -----
-IE7 doesn't support the :hover pseudo-class.
-This leaves tooltips open, until the user does a mouseover + mouseleave over the tooltip (or opens another tooltip).
-One alternative is to just close the tooltip if the :hover pseudo-class is missing. (I did this in the *ie7* branch.)
-The other alternative is to not use the :hover pseudo-class at all, and use a mouse-in mouse-out approach.
+IE7 doesn't support the :hover pseudo-class, so we use a mouseover + mouseleave combination to decide whether to hide the tooltip.
+A much more elegant solution can be done using the :hover pseudo class.

@@ -1,6 +1,6 @@
 /*
  * Created  : Thu 03 Jan 2013 05:43:15 PM EST
- * Modified : Fri 04 Jan 2013 09:39:16 PM EST
+ * Modified : Sat 05 Jan 2013 12:00:46 AM EST
  * Author   : GI <gi1242+js@nospam.com> (replace nospam with gmail)
  *
  * Copyright 2013, GI.
@@ -29,14 +29,41 @@
 	    if( tip.length === 0 )
 		throw( 'No element with ID ' + t.attr('title') );
 
+	    var closeTip = function( force )
+		{
+		    if( force || !tip.data('pTooltip').mouseEntered )
+			tip.hide();
+		};
+
+	    // Set pTooltip.mouseEntered when the mouse enters.
+	    tip.mouseover( function()
+		    {
+			var d = $.extend( tip.data('pTooltip'), { mouseEntered: true } );
+			tip.data( 'pTooltip', d );
+		    } );
+
+	    // Close the tool tip when the mouse leaves
+	    tip.mouseleave( function() { tip.hide(); } );
+
+	    // Style the tip
+	    tip.hide().addClass( 'ui-tooltip ui-widget ui-corner-all ui-widget-content' );
+
+	    /*
+	     * Now deal with the element t.
+	     */
+
 	    // Remove title attribute from element
 	    t.removeAttr( 'title' );
 
 	    // Show tooltip on mouse over.
 	    t.mouseover( function()
 		{
+		    var d = $.extend( tip.data('pTooltip'), { mouseEntered: false } );
+
 		    // First hide all visible tips
 		    $(':visible:data(pTooltip)').hide();
+
+		    tip.data( 'pTooltip', d );
 
 		    tip.show().position(
 			{ my: 'center top+15', at: 'center bottom', of: t,
@@ -46,34 +73,9 @@
 	    // Wait a little, and then call the close function.
 	    t.mouseleave( function()
 		{
-		    setTimeout(
-			// var tip from parent is passed to this anonymous function
-			function() {
-			    try
-			    {
-				if( ! t.add( tip ).is( $(':hover') ) )
-				    tip.hide();
-			    }
-			    catch(err)
-			    {
-				// On IE7, which doesn't support :hover
-				console.error( err.description );
-				tip.hide(); // Will forcibly hide tooltip
-			    }
-			},
-			500 );
+		    setTimeout( function() { closeTip( false); }, 500 );
 		});
 	    
-
-	    // Mark tip as a tooltip
-	    tip.data( 'pTooltip', true );
-
-	    // Close the tool tip when the mouse leaves
-	    tip.mouseleave( function() { tip.hide(); } );
-
-	    // Style the tip
-	    tip.hide().addClass( 'ui-tooltip ui-widget ui-corner-all ui-widget-content' );
-
 	} );
     }
 })(jQuery);
