@@ -44,3 +44,11 @@ Notes
 
 Ideally it would be nice if the jQuery UI tooltip widget had an option that allowed this functionality.
 However, I didn't have the time to wade through their build process to submit a patch.
+(See also the bugzilla http://bugs.jqueryui.com/ticket/8782)
+
+Compatibility
+-----
+IE7 doesn't support the :hover pseudo-class.
+This leaves tooltips open, until the user does a mouseover + mouseleave over the tooltip (or opens another tooltip).
+One alternative is to just close the tooltip if the :hover pseudo-class is missing. (I did this in the *ie7* branch.)
+The other alternative is to not use the :hover pseudo-class at all, and use a mouse-in mouse-out approach.
