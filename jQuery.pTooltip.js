@@ -1,6 +1,6 @@
 /*
  * Created  : Thu 03 Jan 2013 05:43:15 PM EST
- * Modified : Sat 05 Jan 2013 05:44:35 PM EST
+ * Modified : Sat 05 Jan 2013 06:07:23 PM EST
  * Author   : GI <gi1242+js@nospam.com> (replace nospam with gmail)
  *
  * Copyright 2013, GI.
@@ -15,10 +15,22 @@
  */
 
 (function($) {
+    function closeTip( tip, uid )
+    {
+	var d = tip.data('pTooltip')
+
+	// Do nothing if the calling uid and tip.uid don't match.
+	// Don't close if the mouse has entered the tooltip. (In
+	// this case the tip will be closed by a mouseleave event)
+	if( uid === d.uid && !d.mouseEntered )
+	    tip.hide();
+    }
+	
     $.fn.pTooltip = function()
     {
 	// this: jQuery object with a list of items for which the tool tip is required.
 	// title attribute to each object contains the ID to the tool tip element.
+
 	return this.each( function()
 	{
 	    // this is a DOM element. ID of tooltip element is in the title attribute
@@ -28,34 +40,6 @@
 	    // Debug check
 	    if( tip.length === 0 )
 		throw( 'No element with ID ' + t.attr('title') );
-
-	    var closeTip = function( uid )
-		{
-		    var d = tip.data('pTooltip')
-
-		    // Do nothing if the calling uid and tip.uid don't match.
-		    // Don't close if the mouse has entered the tooltip. (In
-		    // this case the tip will be closed by a mouseleave event)
-		    if( uid === d.uid && !d.mouseEntered )
-			tip.hide();
-		};
-
-	    // Set pTooltip.mouseEntered when the mouse enters.
-	    tip.mouseover( function()
-		    {
-			var d = $.extend( tip.data('pTooltip'), { mouseEntered: true } );
-			tip.data( 'pTooltip', d );
-		    } );
-
-	    // Close the tool tip when the mouse leaves
-	    tip.mouseleave( function() { tip.hide(); } );
-
-	    // Style the tip
-	    tip.hide().addClass( 'ui-tooltip ui-widget ui-corner-all ui-widget-content' );
-
-	    /*
-	     * Now deal with the element t.
-	     */
 
 	    // Remove title attribute from element
 	    t.removeAttr( 'title' );
@@ -85,8 +69,21 @@
 		    var d = $.extend( tip.data('pTooltip'), { uid: uid} );
 		    tip.data( 'pTooltip', d );
 
-		    setTimeout( function() { closeTip( uid ); }, 500 );
+		    setTimeout( function() { closeTip( tip, uid ); }, 500 );
 		});
+
+	    // Set pTooltip.mouseEntered when the mouse enters.
+	    tip.mouseover( function()
+		    {
+			var d = $.extend( tip.data('pTooltip'), { mouseEntered: true } );
+			tip.data( 'pTooltip', d );
+		    } );
+
+	    // Close the tool tip when the mouse leaves
+	    tip.mouseleave( function() { tip.hide(); } );
+
+	    // Style the tip
+	    tip.hide().addClass( 'ui-tooltip ui-widget ui-corner-all ui-widget-content' );
 	    
 	} );
     }
