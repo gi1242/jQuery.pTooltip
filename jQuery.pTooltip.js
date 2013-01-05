@@ -1,6 +1,6 @@
 /*
  * Created  : Thu 03 Jan 2013 05:43:15 PM EST
- * Modified : Sat 05 Jan 2013 12:00:46 AM EST
+ * Modified : Sat 05 Jan 2013 01:45:29 AM EST
  * Author   : GI <gi1242+js@nospam.com> (replace nospam with gmail)
  *
  * Copyright 2013, GI.
@@ -24,6 +24,7 @@
 	    // this is a DOM element. ID of tooltip element is in the title attribute
 	    var t = $(this);
 	    var tip = $( '#' + t.attr('title') );
+	    var mouseEntered = false;
 
 	    // Debug check
 	    if( tip.length === 0 )
@@ -31,15 +32,20 @@
 
 	    var closeTip = function( force )
 		{
-		    if( force || !tip.data('pTooltip').mouseEntered )
+		    // Before closing, make sure the tip was shown by us, and
+		    // not reshown by another element (e.g. when multiple
+		    // elements have the same tooltip.)
+		    if(
+			tip.data( 'pTooltip' ) === t.get(0)
+			&& (force || !mouseEntered )
+		      )
 			tip.hide();
 		};
 
 	    // Set pTooltip.mouseEntered when the mouse enters.
 	    tip.mouseover( function()
 		    {
-			var d = $.extend( tip.data('pTooltip'), { mouseEntered: true } );
-			tip.data( 'pTooltip', d );
+			mouseEntered = true;
 		    } );
 
 	    // Close the tool tip when the mouse leaves
@@ -58,12 +64,14 @@
 	    // Show tooltip on mouse over.
 	    t.mouseover( function()
 		{
-		    var d = $.extend( tip.data('pTooltip'), { mouseEntered: false } );
-
-		    // First hide all visible tips
+		    // First hide all (other?) visible tips
 		    $(':visible:data(pTooltip)').hide();
 
-		    tip.data( 'pTooltip', d );
+		    // Reset mouseEntered.
+		    mouseEntered = false;
+
+		    // Store the caller node in tip
+		    tip.data( 'pTooltip', t.get(0) );
 
 		    tip.show().position(
 			{ my: 'center top+15', at: 'center bottom', of: t,
