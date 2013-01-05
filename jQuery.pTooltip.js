@@ -1,6 +1,6 @@
 /*
  * Created  : Thu 03 Jan 2013 05:43:15 PM EST
- * Modified : Fri 04 Jan 2013 03:08:43 PM EST
+ * Modified : Fri 04 Jan 2013 09:39:16 PM EST
  * Author   : GI <gi1242+js@nospam.com> (replace nospam with gmail)
  *
  * Copyright 2013, GI.
@@ -49,8 +49,17 @@
 		    setTimeout(
 			// var tip from parent is passed to this anonymous function
 			function() {
-			    if( ! t.add( tip ).is( $(':hover') ) )
-				tip.hide();
+			    try
+			    {
+				if( ! t.add( tip ).is( $(':hover') ) )
+				    tip.hide();
+			    }
+			    catch(err)
+			    {
+				// On IE7, which doesn't support :hover
+				console.error( err.description );
+				tip.hide(); // Will forcibly hide tooltip
+			    }
 			},
 			500 );
 		});
