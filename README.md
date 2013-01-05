@@ -48,5 +48,6 @@ However, I didn't have the time to wade through their build process to submit a 
 
 Compatibility
 -----
-IE7 doesn't support the :hover pseudo-class, so we use a mouseover + mouseleave combination to decide whether to hide the tooltip.
-A much more elegant solution can be done using the :hover pseudo class.
+Works on Firefox, Safari, Chrome (all versions I could find).
+Getting it to work on IE was a mess (see the hover branch -- cleaner code).
+But as of now it appears to work on IE6 and up.
