@@ -1,6 +1,6 @@
 /*
  * Created  : Thu 03 Jan 2013 05:43:15 PM EST
- * Modified : Sat 05 Jan 2013 06:07:23 PM EST
+ * Modified : Sun 06 Jan 2013 11:07:25 PM EST
  * Author   : GI <gi1242+js@nospam.com> (replace nospam with gmail)
  *
  * Copyright 2013, GI.
@@ -26,16 +26,36 @@
 	    tip.hide();
     }
 	
-    $.fn.pTooltip = function()
+    $.fn.pTooltip = function( args )
     {
 	// this: jQuery object with a list of items for which the tool tip is required.
-	// title attribute to each object contains the ID to the tool tip element.
+	var options = {
+	    tipCloseDelay: 500, /* ms after which we attempt to close the tip */
+
+	    findToolTip: function(t) {
+		/*
+		 * Should return a jQuery object containining the tool tip for
+		 * the jQuery object t. (Default: title attribute to each
+		 * object contains the ID to the tool tip element.)
+		 */
+		return $( '#' + t.attr('title') );
+	    },
+
+	    tipPosition: function(t) {
+		/*
+		 * Returns the position at which the tip of "t" should be placed. 
+		 */
+		return { my: 'center top+15', at: 'center bottom', of: t,
+			    collision: 'fit flip' };
+	    }
+	};
+	$.extend( options, args );
 
 	return this.each( function()
 	{
 	    // this is a DOM element. ID of tooltip element is in the title attribute
 	    var t = $(this);
-	    var tip = $( '#' + t.attr('title') );
+	    var tip = options.findToolTip(t);
 
 	    // Debug check
 	    if( tip.length === 0 )
@@ -56,9 +76,7 @@
 			    { mouseEntered: false, uid: 0 } );
 		    tip.data( 'pTooltip', d );
 
-		    tip.show().position(
-			{ my: 'center top+15', at: 'center bottom', of: t,
-			    collision: 'fit flip' });
+		    tip.show().position( options.tipPosition(t) );
 		});
 
 	    // Wait a little, and then call the close function.
@@ -69,7 +87,8 @@
 		    var d = $.extend( tip.data('pTooltip'), { uid: uid} );
 		    tip.data( 'pTooltip', d );
 
-		    setTimeout( function() { closeTip( tip, uid ); }, 500 );
+		    setTimeout( function() { closeTip( tip, uid ); },
+			options.tipCloseDelay );
 		});
 
 	    // Set pTooltip.mouseEntered when the mouse enters.
