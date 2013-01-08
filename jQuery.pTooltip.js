@@ -1,6 +1,6 @@
 /*
  * Created  : Thu 03 Jan 2013 05:43:15 PM EST
- * Modified : Sun 06 Jan 2013 11:07:25 PM EST
+ * Modified : Tue 08 Jan 2013 01:32:50 PM EST
  * Author   : GI <gi1242+js@nospam.com> (replace nospam with gmail)
  *
  * Copyright 2013, GI.
@@ -83,7 +83,7 @@
 	    t.mouseleave( function()
 		{
 		    // Use time (in miliseconds) as a UID
-		    var uid = new Date().getTime();
+		    var uid = $.now();
 		    var d = $.extend( tip.data('pTooltip'), { uid: uid} );
 		    tip.data( 'pTooltip', d );
 
